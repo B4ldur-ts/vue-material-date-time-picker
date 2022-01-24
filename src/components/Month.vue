@@ -4,7 +4,7 @@
       <li
         v-for="(month, index) in months"
         :key="`${month}-month`"
-        :class="{ selected: (index === selectedMoth)}"
+        :class="{ selected: index === selectedMoth }"
         class="vmdtp_list-item"
         @click.prevent="handleClick(index)"
       >
@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/css/var";
+@import '../assets/css/var';
 
 .vmdtp_body {
   height: 242px;

@@ -13,11 +13,11 @@
       <li
         v-for="(obj, index) in days"
         :key="`${obj.day}-${index}`"
-        :class="{disabled: obj.disabled}"
+        :class="{ disabled: obj.disabled }"
         class="vmdtp_main__item"
         @click.prevent="handleClick(obj.day)"
       >
-        <span :class="{ selected: (obj.day === selectedDay)}">
+        <span :class="{ selected: obj.day === selectedDay }">
           {{ obj.day }}
         </span>
       </li>
@@ -69,9 +69,12 @@ export default {
   },
   computed: {
     days () {
-      const disabled = this.disabledDates.length > 0 ? this.disabledDates : this.disabledDatesAndTimes
+      const disabled =
+        this.disabledDates.length > 0
+          ? this.disabledDates
+          : this.disabledDatesAndTimes
       const prevMonthDays = new Array(this.position).fill(null)
-      const monthDays = Array.from({length: this.number}, (v, k) => k + 1)
+      const monthDays = Array.from({ length: this.number }, (v, k) => k + 1)
 
       let filteredDates
       const dates = [...prevMonthDays, ...monthDays]
@@ -87,7 +90,9 @@ export default {
           } else if (!o.to && o.from && !obj.disabled) {
             obj.disabled = !(dayDate.getTime() <= fromJSDate.getTime())
           } else if (o.to && o.from && !obj.disabled) {
-            obj.disabled = (fromJSDate.getTime() <= dayDate.getTime() && dayDate.getTime() <= toJSDate.getTime())
+            obj.disabled =
+              fromJSDate.getTime() <= dayDate.getTime() &&
+              dayDate.getTime() <= toJSDate.getTime()
           } else if (!obj.disabled) {
             obj.disabled = false
           }
@@ -102,7 +107,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/css/var";
+@import '../assets/css/var';
 
 .vmdtp_body {
   height: 290px;

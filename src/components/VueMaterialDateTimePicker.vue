@@ -9,7 +9,7 @@
       class="vmdtp_input"
       @click.prevent="handleClick"
       @keypress.enter="isPickerShown = true"
-    >
+    />
     <transition>
       <Picker
         v-if="isPickerShown"
@@ -64,13 +64,20 @@ export default {
         const isArray = Array.isArray(v)
         const isObject = typeof v === 'object'
         if (isArray) {
-          return v.every(value => (value.hasOwnProperty('to') ||
-            value.hasOwnProperty('from')) &&
-            (value.to && Date.parse(value.to)) ||
-            (value.from && Date.parse(value.from)))
+          return v.every(
+            value =>
+              ((value.hasOwnProperty('to') || value.hasOwnProperty('from')) &&
+                value.to &&
+                Date.parse(value.to)) ||
+              (value.from && Date.parse(value.from))
+          )
         } else if (isObject) {
-          return (v.hasOwnProperty('to') || v.hasOwnProperty('from')) && (v.to && Date.parse(v.to)) ||
+          return (
+            ((v.hasOwnProperty('to') || v.hasOwnProperty('from')) &&
+              v.to &&
+              Date.parse(v.to)) ||
             (v.from && Date.parse(v.to))
+          )
         }
         return false
       }
@@ -82,13 +89,20 @@ export default {
         const isArray = Array.isArray(v)
         const isObject = typeof v === 'object'
         if (isArray) {
-          return v.every(value => (value.hasOwnProperty('to') ||
-            value.hasOwnProperty('from')) &&
-            (value.to && Date.parse(value.to)) ||
-            (value.from && Date.parse(value.from)))
+          return v.every(
+            value =>
+              ((value.hasOwnProperty('to') || value.hasOwnProperty('from')) &&
+                value.to &&
+                Date.parse(value.to)) ||
+              (value.from && Date.parse(value.from))
+          )
         } else if (isObject) {
-          return (v.hasOwnProperty('to') || v.hasOwnProperty('from')) && (v.to && Date.parse(v.to)) ||
+          return (
+            ((v.hasOwnProperty('to') || v.hasOwnProperty('from')) &&
+              v.to &&
+              Date.parse(v.to)) ||
             (v.from && Date.parse(v.to))
+          )
         }
         return false
       }
@@ -111,7 +125,9 @@ export default {
   computed: {
     parsedDisabledDates () {
       if (!this.disabledDates) return []
-      const dates = Array.isArray(this.disabledDates) ? this.disabledDates : [this.disabledDates]
+      const dates = Array.isArray(this.disabledDates)
+        ? this.disabledDates
+        : [this.disabledDates]
       return dates.map(d => {
         Object.keys(d).forEach(k => {
           let date = new Date(d[k])
@@ -122,11 +138,20 @@ export default {
     },
     parsedDisabledDatesAndTimes () {
       if (!this.disabledDatesAndTimes) return []
-      const dates = Array.isArray(this.disabledDatesAndTimes) ? this.disabledDatesAndTimes : [this.disabledDatesAndTimes]
+      const dates = Array.isArray(this.disabledDatesAndTimes)
+        ? this.disabledDatesAndTimes
+        : [this.disabledDatesAndTimes]
       return dates.map(d => {
         Object.keys(d).forEach(k => {
           let date = new Date(d[k])
-          d[k] = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds())
+          d[k] = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate(),
+            date.getHours(),
+            date.getMinutes(),
+            date.getSeconds()
+          )
         })
         return d
       })
@@ -138,7 +163,9 @@ export default {
       }
     },
     displayedValue () {
-      const isValueFormattedPassed = this.$options.propsData.hasOwnProperty('valueFormatted')
+      const isValueFormattedPassed = this.$options.propsData.hasOwnProperty(
+        'valueFormatted'
+      )
       return isValueFormattedPassed ? this.valueFormatted : this.value
     }
   },
@@ -167,7 +194,7 @@ export default {
   border: 1px solid black;
   border-radius: 4px;
   overflow: hidden;
-  &[disabled="disabled"] {
+  &[disabled='disabled'] {
     background-color: transparent;
   }
 }

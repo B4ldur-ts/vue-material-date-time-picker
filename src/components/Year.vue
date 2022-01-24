@@ -5,7 +5,7 @@
         v-for="year in yearRange"
         :key="`${year}-year`"
         :ref="`${year}-year`"
-        :class="{ selected: (parseInt(year) === parseInt(selectedYear))}"
+        :class="{ selected: parseInt(year) === parseInt(selectedYear) }"
         class="vmdtp_list-item"
         @click.prevent="handleClick(year)"
       >
@@ -45,7 +45,7 @@ export default {
     scroll () {
       const pointYear = this.selectedYear - 3
       const selectedYearElement = this.$refs[`${pointYear}-year`][0]
-      if (selectedYearElement && 'scrollIntoView' in selectedYearElement) selectedYearElement.scrollIntoView({ behavior: 'auto' })
+      if (selectedYearElement && 'scrollIntoView' in selectedYearElement) { selectedYearElement.scrollIntoView({ behavior: 'auto' }) }
     }
   },
   mounted () {
@@ -55,7 +55,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/css/var";
+@import '../assets/css/var';
 
 .vmdtp_body {
   height: 290px;

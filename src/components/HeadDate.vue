@@ -37,7 +37,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/css/var";
+@import '../assets/css/var';
 
 .vmdtp_header {
   background-color: $c-blue-darken;

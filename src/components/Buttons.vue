@@ -1,5 +1,5 @@
 <template>
-	<div class="vmdtp_buttons">
+  <div class="vmdtp_buttons">
     <img
       v-if="isCalendarIconShown"
       alt="calendar"
@@ -8,8 +8,16 @@
       @click.prevent="$emit('calendar')"
     />
     <div style="flex-grow: 1"></div>
-    <button class="vmdtp_button" @click.prevent="$emit('cancel')">Cancel</button>
-    <button class="vmdtp_button" :class="{disabled}" @click.prevent="$emit('ok')">OK</button>
+    <button class="vmdtp_button" @click.prevent="$emit('cancel')">
+      Cancel
+    </button>
+    <button
+      class="vmdtp_button"
+      :class="{ disabled }"
+      @click.prevent="$emit('ok')"
+    >
+      OK
+    </button>
   </div>
 </template>
 
@@ -41,14 +49,17 @@ export default {
       return (this.mode === 4 || this.mode === 3) && !this.canFinish
     },
     isCalendarIconShown () {
-      return !this.isTimeOnly && (this.mode === this.MODE.HOUR || this.mode === this.MODE.MINUTE)
+      return (
+        !this.isTimeOnly &&
+        (this.mode === this.MODE.HOUR || this.mode === this.MODE.MINUTE)
+      )
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/css/var.scss";
+@import '../assets/css/var.scss';
 
 .vmdtp_img {
   width: 16px;
@@ -72,7 +83,7 @@ export default {
   line-height: 22px;
   font-weight: 600;
   text-transform: uppercase;
-  color: $c-blue;
+  color: rgb(34, 34, 34);
   cursor: pointer;
   outline: none;
   &.disabled {

@@ -1,16 +1,18 @@
 <template>
   <div class="vmdtp_header">
     <span
-      :class="{active: mode === 3}"
+      :class="{ active: mode === 3 }"
       class="vmdtp_text vmdtp_text--pointer"
       @click.prevent="$emit('modeUpdate', MODE.HOUR)"
-    >{{ hour }}</span>
+      >{{ hour }}</span
+    >
     <span class="vmdtp_text">:</span>
     <span
-      :class="{active: mode === 4, disabled: isOnlyHour}"
+      :class="{ active: mode === 4, disabled: isOnlyHour }"
       class="vmdtp_text vmdtp_text--pointer"
       @click.prevent="$emit('modeUpdate', MODE.MINUTE)"
-    >{{ minute }}</span>
+      >{{ minute }}</span
+    >
     <span class="vmdtp_text vmdtp_text--sm">{{ pmOrAm }}</span>
   </div>
 </template>
@@ -63,20 +65,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/css/var";
+@import '../assets/css/var';
 
 .vmdtp_header {
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
-  background-color: $c-blue-darken;
+  background-color: rgb(34, 34, 34);
   color: $c-white;
   padding: 16px;
+  border-radius: 8px 8px 0 0;
 }
 
 .vmdtp_text {
   margin: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 70px;
   line-height: 70px;
   font-weight: 500;
@@ -98,7 +101,7 @@ export default {
     font-size: 24px;
     line-height: 24px;
     font-weight: 400;
-    opacity: 1;
+    opacity: 0;
   }
 }
 </style>

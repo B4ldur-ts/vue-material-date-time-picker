@@ -1,10 +1,16 @@
 <template>
   <div class="vmdtp_switch">
-    <span class="vmdtp_arrow vmdtp_arrow--left" @click.prevent="goBack">&#10094;</span>
+    <span class="vmdtp_arrow vmdtp_arrow--left" @click.prevent="goBack"
+      >&#10094;</span
+    >
     <div class="vmdtp_content">
-      <p class="vmdtp_text" @click.prevent="toggleMode">{{ `${this.month} ${this.year}` }}</p>
+      <p class="vmdtp_text" @click.prevent="toggleMode">
+        {{ `${this.month} ${this.year}` }}
+      </p>
     </div>
-    <span class="vmdtp_arrow vmdtp_arrow--right" @click.prevent="goForward">&#10095;</span>
+    <span class="vmdtp_arrow vmdtp_arrow--right" @click.prevent="goForward"
+      >&#10095;</span
+    >
   </div>
 </template>
 
@@ -40,7 +46,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/css/var";
+@import '../assets/css/var';
 
 .vmdtp_switch {
   display: flex;

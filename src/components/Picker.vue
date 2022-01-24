@@ -8,80 +8,78 @@
 -->
 
 <template>
-  <div class="vmdtp_wrap">
-    <div class="vmdtp_picker">
-      <HeadDate
-        v-if="mode < 3"
-        :year="year"
-        :month="MONTH_SET[month]"
-        :week-day="WEEK_SET[day]"
-        :date="date"
-      />
-      <HeadTime
-        v-else
-        :hours="hour"
-        :minutes="minute"
-        :is-only-hour="onlyHour"
-        :is-pm="pm"
-        :mode="mode"
-        @modeUpdate="handleModeUpdateFromTimeHeader"
-      />
-      <Switcher
-        v-if="mode === 1 || mode === 2"
-        :mode="MODE_SET[mode]"
-        :month="MONTH_SET[month]"
-        :year="year"
-        @toggleMode="handleToggleMode"
-        @back="handleSwitchBack"
-        @forward="handleSwitchForward"
-      />
-      <Year
-        v-show="mode === 0"
-        :selected-year="year"
-        @year="setYear"
-      />
-      <Month
-        v-show="mode === 1"
-        :name="MONTH_SET"
-        :selected-moth="month"
-        @month="setMonth"
-      />
-      <Day
-        v-show="mode === 2"
-        :selected-year="year"
-        :selected-moth="month"
-        :disabled-dates="disabledDates"
-        :disabled-dates-and-times="disabledDatesAndTimes"
-        :number="getNumberOfDaysInMonth"
-        :position="firstDayOfMonthPosition"
-        :name="weekDaysShortNamesSet"
-        :selected-day="date"
-        @day="setDay"
-      />
-      <Time
-        v-if="mode === 3 || mode === 4"
-        :mode="mode"
-        :is-pm="pm"
-        :selected-year="year"
-        :selected-moth="month"
-        :selected-day="date"
-        :disabled-dates-and-times="disabledDatesAndTimes"
-        :minute-step="minuteStep"
-        @mode="setMode"
-        @hour="setHour"
-        @minute="setMinute"
-        @pm="setPmState"
-        @update-can-finish="handleUpdateCanFinish"
-      />
-      <Buttons
-        v-if="mode >= 2"
-        :mode="mode"
-        :can-finish="canFinish"
-        :is-time-only="isTimeOnly"
-        @calendar="handleCalendarClick"
-        @cancel="handleCancelClick"
-        @ok="handleOkClick"
-      />
+  <div class="modal-backdrop" @click.self="handleCancelClick">
+    <div class="vmdtp_wrap">
+      <div class="vmdtp_picker">
+        <HeadDate
+          v-if="mode < 3"
+          :year="year"
+          :month="MONTH_SET[month]"
+          :week-day="WEEK_SET[day]"
+          :date="date"
+        />
+        <HeadTime
+          v-else
+          :hours="hour"
+          :minutes="minute"
+          :is-only-hour="onlyHour"
+          :is-pm="pm"
+          :mode="mode"
+          @modeUpdate="handleModeUpdateFromTimeHeader"
+        />
+        <Switcher
+          v-if="mode === 1 || mode === 2"
+          :mode="MODE_SET[mode]"
+          :month="MONTH_SET[month]"
+          :year="year"
+          @toggleMode="handleToggleMode"
+          @back="handleSwitchBack"
+          @forward="handleSwitchForward"
+        />
+        <Year v-show="mode === 0" :selected-year="year" @year="setYear" />
+        <Month
+          v-show="mode === 1"
+          :name="MONTH_SET"
+          :selected-moth="month"
+          @month="setMonth"
+        />
+        <Day
+          v-show="mode === 2"
+          :selected-year="year"
+          :selected-moth="month"
+          :disabled-dates="disabledDates"
+          :disabled-dates-and-times="disabledDatesAndTimes"
+          :number="getNumberOfDaysInMonth"
+          :position="firstDayOfMonthPosition"
+          :name="weekDaysShortNamesSet"
+          :selected-day="date"
+          @day="setDay"
+        />
+        <Time
+          v-if="mode === 3 || mode === 4"
+          :mode="mode"
+          :is-pm="pm"
+          :selected-year="year"
+          :selected-moth="month"
+          :selected-day="date"
+          :disabled-dates-and-times="disabledDatesAndTimes"
+          :minute-step="minuteStep"
+          @mode="setMode"
+          @hour="setHour"
+          @minute="setMinute"
+          @pm="setPmState"
+          @update-can-finish="handleUpdateCanFinish"
+        />
+        <Buttons
+          v-if="mode >= 2"
+          :mode="mode"
+          :can-finish="canFinish"
+          :is-time-only="isTimeOnly"
+          @calendar="handleCalendarClick"
+          @cancel="handleCancelClick"
+          @ok="handleOkClick"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -182,7 +180,8 @@ export default {
     minute: null,
     pm: true,
     canFinish: true,
-    mode: null
+    mode: null,
+    someVar: false
   }),
   methods: {
     setDay (date) {
@@ -215,7 +214,13 @@ export default {
       } else if (!this.isDateOnly && this.mode === 2) {
         this.mode++
       } else {
-        const hours = this.pm ? (this.hour + 12 === 24 ? 12 : this.hour + 12) : (this.hour + 12 === 12 ? 0 : this.hour)
+        const hours = this.someVar
+          ? this.hour + 12 === 24
+            ? 12
+            : this.hour + 12
+          : this.hour + 12 === 12
+          ? 0
+          : this.hour
         const date = new Date(
           this.year,
           this.month,
@@ -243,6 +248,9 @@ export default {
         case 0:
           this.mode = 2
       }
+    },
+    handleBackdropClick () {
+      console.log('click')
     },
     handleSwitchBack () {
       switch (this.mode) {
@@ -290,7 +298,9 @@ export default {
       return new Date(this.year, this.month, 1).getDay()
     },
     weekDaysShortNamesSet () {
-      return Object.values(this.WEEK_SET).map(i => i.substring(0, 1).toUpperCase())
+      return Object.values(this.WEEK_SET).map(i =>
+        i.substring(0, 1).toUpperCase()
+      )
     },
     onlyHour () {
       return this.minuteStep === 60
@@ -312,11 +322,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/css/var.scss";
+@import '../assets/css/var.scss';
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.3);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .vmdtp_wrap {
   position: fixed;
-  z-index: 1000;
+  z-index: 100;
   top: 0;
   right: 0;
   bottom: 0;
@@ -333,5 +357,6 @@ export default {
   width: 290px;
   background-color: $c-white;
   box-shadow: 0 0 4px 0 rgba($c-black, 0.3);
+  border-radius: 8px;
 }
 </style>

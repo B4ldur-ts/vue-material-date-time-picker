@@ -22,21 +22,21 @@
         :class="{ pressed: isPressed }"
         :style="{ transform: `rotate(${degree}deg)` }"
       ></div>
-      <button
-        :disabled="!isEnabledAM"
-        class="vmdtp_button vmdtp_button--left"
-        :class="{ active: !isPm }"
-        @click.prevent="handlePmChange(false)"
-      >
-        AM
-      </button>
-      <button
-        class="vmdtp_button vmdtp_button--right"
-        :class="{ active: isPm }"
-        @click.prevent="handlePmChange(true)"
-      >
-        PM
-      </button>
+      <!-- <button
+				:disabled="!isEnabledAM"
+				class="vmdtp_button vmdtp_button--left"
+				:class="{ active: !isPm }"
+				@click.prevent="handlePmChange(false)"
+			>
+				AM
+			</button>
+			<button
+				class="vmdtp_button vmdtp_button--right"
+				:class="{ active: isPm }"  
+				@click.prevent="handlePmChange(true)"
+			>
+				PM
+			</button> -->
     </div>
   </div>
 </template>
@@ -95,7 +95,9 @@ export default {
     isHourMode: {
       immediate: true,
       handler (v) {
-        if (v) this.hours ? this.$emit('hour', this.hours) : this.findInitialPoint()
+        if (v) {
+          this.hours ? this.$emit('hour', this.hours) : this.findInitialPoint()
+        }
       }
     },
     degree: {
@@ -105,19 +107,26 @@ export default {
           const hours = Math.round(v / 30)
           if (this.isPm) {
             if (hours === 0) {
-              this.hours = helpers.isHourDisabled(12, this.allHours) ? this.moveArrowToClosestPoint() : 12
+              this.hours = helpers.isHourDisabled(12, this.allHours)
+                ? this.moveArrowToClosestPoint()
+                : 12
             } else {
-              this.hours = helpers.isHourDisabled(hours, this.allHours) ? this.moveArrowToClosestPoint() : hours
+              this.hours = helpers.isHourDisabled(hours, this.allHours)
+                ? this.moveArrowToClosestPoint()
+                : hours
             }
           } else {
             this.hours = hours === 12 ? 0 : hours
           }
-          this.$emit('hour', this.hours)
+
+          this.$emit('hour', this.hours + 6)
         } else {
           const rounded = Math.round(v / 6)
           const minutes = rounded !== 60 ? rounded : 0
           if (!minutes) {
-            this.minutes = helpers.isMinuteDisabled(minutes, this.allMinutes) ? this.moveArrowToClosestPoint() : minutes
+            this.minutes = helpers.isMinuteDisabled(minutes, this.allMinutes)
+              ? this.moveArrowToClosestPoint()
+              : minutes
           } else {
             this.minutes = minutes
           }
@@ -126,7 +135,10 @@ export default {
       }
     },
     mode (v) {
-      if (v === 3) this.degree = this.hours * 30
+      if (v === 3) {
+        this.degree = (this.hours - 6) * 30
+      }
+
       if (v === 4) this.degree = this.minutes * 6
     },
     hours: {
@@ -134,7 +146,9 @@ export default {
       handler (v) {
         const areHoursSet = v !== null
         const areMinutesSet = !!this.minutes
-        return areHoursSet && areMinutesSet ? this.$emit('update-can-finish', true) : this.$emit('update-can-finish', false)
+        return areHoursSet && areMinutesSet
+          ? this.$emit('update-can-finish', true)
+          : this.$emit('update-can-finish', false)
       }
     },
     minutes: {
@@ -208,9 +222,14 @@ export default {
     findInitialPoint () {
       const time = this.allHours[this.allHours.length - 1]
       const { disabled } = time
-      this.disabledDatesAndTimes ? (disabled ? this.moveArrowToClosestPoint() : this.hours = time.point) : this.hours = time.point
+      this.disabledDatesAndTimes
+        ? disabled
+          ? this.moveArrowToClosestPoint()
+          : (this.hours = time.point)
+        : (this.hours = time.point)
     },
     moveArrowToClosestPoint () {
+      this.hours = this.hours + 6
       const clockItemsAsNumbers = [...this.enabledPoints].map(p => p.point)
       if (this.isHourMode) {
         const hours = this.findClosest(clockItemsAsNumbers, this.hours)
@@ -250,12 +269,13 @@ export default {
     },
     handlePmChange (mode) {
       this.$emit('pm', mode)
-      this.$emit('hour', this.hours)
+      this.$emit('hour', this.hours + 6)
     },
     calcDegByMinutes (minutes) {
       return (minutes / 60) * 360
     },
     calcDegByHours (hours) {
+      hours = hours - 6
       return (hours / 12) * 360
     },
     calculateDeg () {
@@ -306,7 +326,10 @@ export default {
       }
 
       if (this.minuteStep >= 5) {
-        const disabled = this.disabledDatesAndTimes.length > 0 ? helpers.createDisabledTimesArray(params) : []
+        const disabled =
+          this.disabledDatesAndTimes.length > 0
+            ? helpers.createDisabledTimesArray(params)
+            : []
         const stepsParams = {
           minutes: minutes,
           step: this.minuteStep,
@@ -319,12 +342,21 @@ export default {
     },
     realHours () {
       if (this.isPm) {
-        const arr = Array.from({ length: 12 }, (v, k) => k + 1)
-        return arr.map(item => ({ disabled: false, point: item }))
+        // const arr = Array.from({ length: 12 }, (v, k) => k + 1);
+        const arr = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+        const consoleReturn = arr.map(item => ({
+          disabled: false,
+          point: item
+        }))
+        return consoleReturn
       } else {
         const arr = Array.from({ length: 12 }, (v, k) => k)
         arr.push(arr.shift())
-        return arr.map(item => ({ disabled: false, point: item }))
+        const consoleReturn2 = arr.map(item => ({
+          disabled: false,
+          point: item
+        }))
+        return consoleReturn2
       }
     },
     disabledHours () {
@@ -442,7 +474,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/css/var";
+@import '../assets/css/var';
 
 .vmdtp_body {
   height: 290px;
@@ -486,7 +518,7 @@ export default {
     }
     &:before {
       display: block;
-      content: "";
+      content: '';
       position: absolute;
       left: -15px;
       top: -32px;
@@ -529,7 +561,7 @@ export default {
     font-weight: 500;
     transform: translate(-50%, -50%);
     color: $c-black;
-    background-color: rgba($c-blue, 0.6);
+    background-color: rgba($c-blue, 0.3);
     border-radius: 50%;
     &.disabled {
       color: $c-gray-darken;
